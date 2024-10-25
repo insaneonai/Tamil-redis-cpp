@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
   // You can use print statements as follows for debugging, they'll be visible when running tests.
   std::cout << "Logs from your program will appear here!\n";
 
-   int server_fd = socket(AF_INET, SOCK_STREAM, 0);
+  int server_fd = socket(AF_INET, SOCK_STREAM, 0);
    if (server_fd < 0) {
     std::cerr << "Failed to create server socket\n";
     return 1;
@@ -29,13 +29,13 @@ int main(int argc, char **argv) {
      std::cerr << "setsockopt failed\n";
      return 1;
    }
-  
+
   struct sockaddr_in server_addr;
   server_addr.sin_family = AF_INET;
   server_addr.sin_addr.s_addr = INADDR_ANY;
   server_addr.sin_port = htons(6379);
   
-  if (bind(server_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) != 0) {
+  if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr) != 0) {
     std::cerr << "Failed to bind to port 6379\n";
     return 1;
   }
@@ -51,7 +51,9 @@ int main(int argc, char **argv) {
   
   std::cout << "Waiting for a client to connect...\n";
   
-  accept(server_fd, (struct sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
+  int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&client_addr_len);
+  send(client_fd, '+PONG\r\n', 7, 0);
+
   std::cout << "Client connected\n";
   
   close(server_fd);
