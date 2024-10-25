@@ -7,6 +7,21 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#define BUFFER_SIZE 128
+
+void handle(int client_fd) {
+    char buff[BUFFER_SIZE] = "";
+    while (1) {
+        memset(&buff, '\0', sizeof(buff));
+        recv(client_fd, buff, 15, 0);
+        if (strcasecmp(buff, "1\r\n$4\r\nping\r\n")) != 0){
+            memset(&buff, 0, sizeof(buff));
+            continue;
+        }
+        send(client_fd, "+PONG\r\n", 7, 0);
+    }
+    return;
+}
 
 int main(int argc, char **argv) {
   // Flush after every std::cout / std::cerr
@@ -52,7 +67,7 @@ int main(int argc, char **argv) {
   std::cout << "Waiting for a client to connect...\n";
   
   int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&client_addr_len);
-  send(client_fd, "+PONG\r\n", 7, 0);
+  handle(client_fd);
 
   std::cout << "Client connected\n";
   
