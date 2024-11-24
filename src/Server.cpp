@@ -26,8 +26,6 @@ void handle(int client_fd) {
         else {
             std::string data(buff.data(), stream);
 
-            std::cout << data << std::endl;
-
             send(client_fd, "+PONG\r\n", 7, 0);
         }
     }
