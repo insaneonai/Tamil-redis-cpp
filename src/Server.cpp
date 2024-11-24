@@ -13,7 +13,7 @@ void handle(int client_fd) {
     std::vector<char> buff(5000);
     
     while (1) {
-        ssize_t stream = recv(client_fd, buff.data(), buff.size(), 0);
+        ssize_t stream = recv(client_fd, buff.data(), 7, 0);
 
         if (stream < 0) {
             std::cout << "Error occured";
