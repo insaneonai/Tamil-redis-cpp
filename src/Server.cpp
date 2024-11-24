@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+<<<<<<< HEAD
 
 void handle(int client_fd) {
     std::vector<char> buff(5000);
@@ -35,6 +36,8 @@ void handle(int client_fd) {
     close(client_fd);
 
 }
+=======
+>>>>>>> parent of 12e54a1 ('PINGPONG')
 
 int main(int argc, char **argv) {
   // Flush after every std::cout / std::cerr
@@ -80,6 +83,10 @@ int main(int argc, char **argv) {
   std::cout << "Waiting for a client to connect...\n";
   
   int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&client_addr_len);
+<<<<<<< HEAD
+=======
+  send(client_fd, "+PONG\r\n", 7, 0);
+>>>>>>> parent of 12e54a1 ('PINGPONG')
 
   std::cout << "Client connected\n";
 
