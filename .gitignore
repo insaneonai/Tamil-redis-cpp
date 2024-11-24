@@ -12,6 +12,12 @@
 
 ./cmake-3.31.0-rc2.tar.gz
 
+vcpkg_installed/
+
+build/
+
+CMakeFiles/
+
 vcpkg/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
