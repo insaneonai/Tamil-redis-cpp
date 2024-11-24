@@ -14,8 +14,6 @@
 
 vcpkg_installed/
 
-build/
-
 vcpkg/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
