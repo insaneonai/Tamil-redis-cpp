@@ -1,26 +1,39 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <vector>
 #include <cstring>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#define BUFFER_SIZE 128
 
 void handle(int client_fd) {
-    char buff[BUFFER_SIZE] = "";
+    std::vector<char> buff(5000);
+    
     while (1) {
-        memset(&buff, '\0', sizeof(buff));
-        recv(client_fd, buff, 15, 0);
-        if (strcasecmp(buff, "1\r\n$4\r\nping\r\n")) != 0){
-            memset(&buff, 0, sizeof(buff));
-            continue;
+        ssize_t stream = recv(client_fd, buff.data(), buff.size(), 0);
+
+        if (stream < 0) {
+            std::cout << "Error occured";
+            break;
         }
-        send(client_fd, "+PONG\r\n", 7, 0);
+        else if (stream == 0) {
+            std::cout << "Client connection closed";
+            break;
+        }
+        else {
+            std::string data(buff.data(), stream);
+
+            std::cout << data << std::endl;
+
+            send(client_fd, "+PONG\r\n", 7, 0);
+        }
     }
-    return;
+
+    close(client_fd);
+
 }
 
 int main(int argc, char **argv) {
@@ -67,11 +80,14 @@ int main(int argc, char **argv) {
   std::cout << "Waiting for a client to connect...\n";
   
   int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&client_addr_len);
-  handle(client_fd);
 
   std::cout << "Client connected\n";
+
+  //send(client_fd, "+PONG\r\n", 7, 0);
+
+  handle(client_fd);
   
-  close(server_fd);
+  // close(server_fd);
 
   return 0;
 }
