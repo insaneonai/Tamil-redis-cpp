@@ -88,8 +88,6 @@ int main(int argc, char **argv) {
   
   int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&client_addr_len);
 
-  send(client_fd, "+PONG\r\n", 7, 0);
-
   std::cout << "Client connected\n";
 
   //send(client_fd, "+PONG\r\n", 7, 0);
