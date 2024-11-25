@@ -26,7 +26,10 @@ void handle(int client_fd) {
         else {
             std::string data(buff.data(), stream);
 
-            send(client_fd, "+PONG\r\n", 7, 0);
+            if (send(client_fd, "+PONG\r\n", 7, 0) == -1) {
+                std::cerr << "Failed to send message\n";
+                return 1;
+            }
         }
     }
 
