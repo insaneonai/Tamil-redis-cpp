@@ -98,13 +98,5 @@ int main(int argc, char **argv) {
       newClient.detach();
   }
 
-  
-
-  //send(client_fd, "+PONG\r\n", 7, 0);
-
-  handle(client_fd);
-  
-  // close(server_fd);
-
   return 0;
 }
