@@ -11,30 +11,36 @@
 
 void handle(int client_fd) {
     std::vector<char> buff(5000);
-    
-    while (1) {
-        ssize_t stream = recv(client_fd, buff.data(), 7, 0);
+
+    while (true) {
+        ssize_t stream = recv(client_fd, buff.data(), buff.size() - 1, 0); // Read more bytes
 
         if (stream < 0) {
-            std::cout << "Error occured";
+            std::cerr << "Error occurred while receiving data\n";
             break;
         }
         else if (stream == 0) {
-            std::cout << "Client connection closed";
+            std::cout << "Client connection closed\n";
             break;
         }
         else {
+            buff[stream] = '\0'; // Null-terminate the string for safety
             std::string data(buff.data(), stream);
 
-            if (send(client_fd, "+PONG\r\n", 7, 0) == -1) {
-                std::cerr << "Failed to send message\n";
-                return;
+            // Check if the received data matches the PING command
+            if (data == "*1\r\n$4\r\nPING\r\n") {
+                if (send(client_fd, "+PONG\r\n", 7, 0) == -1) {
+                    std::cerr << "Failed to send message\n";
+                    break;
+                }
+            }
+            else {
+                std::cerr << "Unexpected command received: " << data << "\n";
             }
         }
     }
 
     close(client_fd);
-
 }
 
 int main(int argc, char **argv) {
