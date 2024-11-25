@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <thread>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -42,6 +43,8 @@ void handle(int client_fd) {
 
     close(client_fd);
 }
+
+
 
 int main(int argc, char **argv) {
   // Flush after every std::cout / std::cerr
@@ -85,10 +88,17 @@ int main(int argc, char **argv) {
   int client_addr_len = sizeof(client_addr);
   
   std::cout << "Waiting for a client to connect...\n";
-  
-  int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&client_addr_len);
 
-  std::cout << "Client connected\n";
+  
+  while (true) {
+      int client_fd = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&client_addr_len);
+      std::cout << "Client connected\n" << client_fd;
+      std::thread newClient(handle, client_fd);
+
+      newClient.detach();
+  }
+
+  
 
   //send(client_fd, "+PONG\r\n", 7, 0);
 
