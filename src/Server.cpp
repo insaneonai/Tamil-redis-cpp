@@ -28,7 +28,7 @@ void handle(int client_fd) {
 
             if (send(client_fd, "+PONG\r\n", 7, 0) == -1) {
                 std::cerr << "Failed to send message\n";
-                return 1;
+                return;
             }
         }
     }
